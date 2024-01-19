@@ -3,6 +3,7 @@ base: core22
 adopt-info: identity
 grade: stable
 confinement: strict
+compression: lzo
 
 parts:
   blueprint-compiler:
@@ -47,7 +48,7 @@ parts:
     stage-packages:
       - gstreamer1.0-vaapi 
       - gstreamer1.0-plugins-ugly
-      - gstreamer1.0-gl
+      - gstreamer1.0-plugins-bad
     build-environment:
       - RUSTUP_HOME: $CRAFT_STAGE/usr/share/rust
       - CARGO_HOME: $CRAFT_STAGE/usr/share/rust
@@ -69,7 +70,7 @@ parts:
       - gnome-42-2204
     override-prime: |
       set -eux
-      for snap in "core22" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
+      for snap in "core22" "gnome-42-2204" "ffmpeg-2204"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       
@@ -96,3 +97,4 @@ apps:
       LD_LIBRARY_PATH: $SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH:$GI_TYPELIB_PATH:$GST_PLUGIN_PATH:$LIBGL_DRIVERS_PATH
     plugs:
       - home
+      - removable-media
