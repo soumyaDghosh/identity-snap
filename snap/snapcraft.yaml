@@ -35,7 +35,7 @@ parts:
     after: [ rustup, blueprint-compiler ]
     plugin: meson
     source: https://gitlab.gnome.org/YaLTeR/identity.git
-    source-tag: 'v0.5.0'
+    source-tag: 'v0.6.0'
     source-depth: 1
     parse-info: [ usr/share/metainfo/org.gnome.gitlab.YaLTeR.Identity.metainfo.xml ]
     meson-parameters:
