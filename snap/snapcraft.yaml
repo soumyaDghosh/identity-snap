@@ -25,7 +25,7 @@ parts:
     override-prime: ''
 
   identity:
-    after: [ rustup, blueprint-compiler ]
+    after: [ rustup ]
     plugin: meson
     source: https://gitlab.gnome.org/YaLTeR/identity.git
     source-tag: 'v0.6.0'
