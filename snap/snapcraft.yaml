@@ -70,6 +70,7 @@ parts:
       for snap in "core22" "gnome-42-2204" "ffmpeg-2204"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
+      cd
       if [ "$CRAFT_ARCH_TRIPLET_BUILD_FOR" == "arm-linux-gnueabihf" ]; then
         execstack --clear-execstack ${CRAFT_PRIME}/usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
       fi
