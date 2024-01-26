@@ -4,6 +4,10 @@ adopt-info: identity
 grade: stable
 confinement: strict
 compression: lzo
+license: GPL-3.0
+source-code: https://gitlab.gnome.org/YaLTeR/identity
+website: https://gitlab.gnome.org/YaLTeR/identity
+issues: https://github.com/soumyaDghosh/identity-snap
 
 parts: 
   rustup:
@@ -67,7 +71,7 @@ parts:
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       if [ "$CRAFT_ARCH_TRIPLET_BUILD_FOR" == "arm-linux-gnueabihf" ]; then
-        execstack --clear-execstack usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
+        execstack --clear-execstack ${CRAFT_PRIME}/usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
       fi
       
 slots:
