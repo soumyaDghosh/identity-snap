@@ -5,15 +5,7 @@ grade: stable
 confinement: strict
 compression: lzo
 
-parts:
-  blueprint-compiler:
-    source: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
-    source-tag: 'v0.8.1'
-    source-depth: 1
-    plugin: meson
-    meson-parameters:
-      - --prefix=/usr
-    override-prime: ''
+parts: 
   rustup:
     plugin: nil
     build-packages: [wget]
@@ -31,25 +23,24 @@ parts:
         ln -s ../share/rust/bin/$i $CRAFT_PART_INSTALL/usr/bin/$i
       done
     override-prime: ''
+
   identity:
     after: [ rustup, blueprint-compiler ]
     plugin: meson
     source: https://gitlab.gnome.org/YaLTeR/identity.git
     source-tag: 'v0.6.0'
     source-depth: 1
-    parse-info: [ usr/share/metainfo/org.gnome.gitlab.YaLTeR.Identity.metainfo.xml ]
+    parse-info: [usr/share/metainfo/org.gnome.gitlab.YaLTeR.Identity.metainfo.xml]
     meson-parameters:
       - --prefix=/snap/identity/current/usr
     build-snaps:
       - ffmpeg-2204-sdk
+      - blueprint-compiler
     build-packages:
       - libgstreamer1.0-dev
       - libgstreamer-plugins-base1.0-dev
     stage-packages:
-      - gstreamer1.0-vaapi 
-      - gstreamer1.0-plugins-ugly
       - gstreamer1.0-plugins-bad
-      - gstreamer1.0-gl
     build-environment:
       - RUSTUP_HOME: $CRAFT_STAGE/usr/share/rust
       - CARGO_HOME: $CRAFT_STAGE/usr/share/rust
@@ -57,23 +48,27 @@ parts:
       - PKG_CONFIG_PATH: /snap/ffmpeg-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:$PKG_CONFIG_PATH
       - PATH: /snap/ffmpeg-2204-sdk/current/usr/bin:$PATH
       - LD_LIBRARY_PATH: /snap/ffmpeg-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
-      - PYTHONPATH: $CRAFT_STAGE/usr/lib/python3/dist-packages:$PYTHONPATH
       - GI_TYPELIB_PATH: /snap/gnome-42-2204-sdk/current/usr/lib/girepository-1.0:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0
     organize: 
       snap/identity/current: .
+
   cleanup:
     after:  # Make this part run last; list all your other parts here
       - identity
-      - blueprint-compiler
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
       - core22
       - gnome-42-2204
+    build-packages:
+      - execstack
     override-prime: |
       set -eux
       for snap in "core22" "gnome-42-2204" "ffmpeg-2204"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
+      if [ "$CRAFT_ARCH_TRIPLET_BUILD_FOR" == "arm-linux-gnueabihf" ]; then
+        execstack --clear-execstack usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
+      fi
       
 slots:
   identity:
