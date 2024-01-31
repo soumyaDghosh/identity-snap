@@ -55,6 +55,11 @@ parts:
       - GI_TYPELIB_PATH: /snap/gnome-42-2204-sdk/current/usr/lib/girepository-1.0:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/girepository-1.0
     organize: 
       snap/identity/current: .
+    override-prime: |
+      craftctl default
+      if [ "$CRAFT_ARCH_TRIPLET_BUILD_FOR" == "arm-linux-gnueabihf" ]; then
+        execstack --clear-execstack ${CRAFT_PART_INSTALL}/usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
+      fi
 
   cleanup:
     after:  # Make this part run last; list all your other parts here
@@ -71,9 +76,6 @@ parts:
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       cd
-      if [ "$CRAFT_ARCH_TRIPLET_BUILD_FOR" == "arm-linux-gnueabihf" ]; then
-        execstack --clear-execstack ${CRAFT_PRIME}/usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
-      fi
       
 slots:
   identity:
