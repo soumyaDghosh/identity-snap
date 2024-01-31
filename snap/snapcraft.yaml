@@ -9,6 +9,11 @@ source-code: https://gitlab.gnome.org/YaLTeR/identity
 website: https://gitlab.gnome.org/YaLTeR/identity
 issues: https://github.com/soumyaDghosh/identity-snap
 
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+  - build-on: armhf
+
 parts: 
   rustup:
     plugin: nil
