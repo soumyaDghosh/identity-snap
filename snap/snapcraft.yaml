@@ -78,7 +78,7 @@ parts:
     override-prime: |
       set -eux
       for snap in "core22" "gnome-42-2204" "ffmpeg-2204"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -rf "$CRAFT_PRIME/{}" \;
       done
       cd
       
