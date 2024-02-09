@@ -63,7 +63,7 @@ parts:
     override-prime: |
       craftctl default
       if [ "$CRAFT_ARCH_TRIPLET_BUILD_FOR" == "arm-linux-gnueabihf" ]; then
-        execstack --clear-execstack usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
+        execstack --clear-execstack ${CRAFT_STAGE}/usr/lib/arm-linux-gnueabihf/libmpeg2.so.0.1.0
       fi
 
   cleanup:
